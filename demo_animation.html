@@ -1,0 +1,211 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coevolution Without a Common Ancestor — co-evo</title>
+<style>
+:root{--acc:#9b2226;--acc2:#c9564b;--ink:#14171a;--bg:#faf7f4;--slate:#20394e;--mut:#6b7480;--rule:#e9e6e1;--calm:#cdd6dc;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:radial-gradient(120% 120% at 50% 0%,#fffdfb 0%,#f3efe9 100%);color:var(--ink);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+ display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:960px;height:600px;position:relative;background:#fff;border-radius:18px;
+ box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 24px 70px rgba(20,23,26,.16),0 4px 14px rgba(20,23,26,.06);overflow:hidden}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:18px;
+ box-shadow:inset 0 0 120px rgba(20,23,26,.05);}
+.bar{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--acc),var(--acc2) 60%,#e0a24a);z-index:5}
+.brand{position:absolute;top:22px;left:30px;font-size:12px;font-weight:800;letter-spacing:.16em;color:var(--ink);text-transform:uppercase;z-index:5;display:flex;align-items:center;gap:9px}
+.brand .glyph{width:20px;height:20px}
+.brand .team{font-weight:600;letter-spacing:.02em;color:var(--acc);text-transform:none;font-size:12.5px}
+.brand .div{color:var(--rule)}
+.progress{position:absolute;top:26px;right:30px;display:flex;gap:6px;z-index:5}
+.dot{width:28px;height:4px;border-radius:2px;background:var(--rule);transition:background .4s}
+.dot.on{background:var(--acc)}
+
+.scene{position:absolute;inset:0;opacity:0;transform:translateY(8px) scale(.995);
+ transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1);pointer-events:none}
+.scene.show{opacity:1;transform:none}
+.title{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:25px;font-weight:800;letter-spacing:-.015em;color:var(--ink)}
+.sub{position:absolute;top:106px;left:0;right:0;text-align:center;font-size:14.5px;color:var(--mut);font-weight:500}
+.sub b{color:var(--slate);font-weight:700}
+
+/* reveal helper */
+.rv{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+
+/* Scene 1: trees */
+.trees{position:absolute;top:150px;left:0;right:0;height:230px}
+svg{overflow:visible}
+.branch{stroke-linecap:round;fill:none;stroke-dasharray:var(--len,120);stroke-dashoffset:var(--len,120);
+ transition:stroke-dashoffset 1.1s ease}
+.branch.drawn{stroke-dashoffset:0}
+.t1{transition:transform 1.4s cubic-bezier(.4,0,.2,1)}
+.gap{position:absolute;top:250px;left:0;right:0;text-align:center;font-size:14px;font-weight:700;color:var(--acc);letter-spacing:.01em}
+.pairbox{position:absolute;bottom:76px;left:50%;transform:translateX(-50%);width:560px}
+.prow{display:flex;gap:4px;justify-content:center;align-items:center;margin:5px 0}
+.cell{width:16px;height:16px;border-radius:4px;background:var(--calm)}
+.cell.h{background:var(--slate)}
+.cell.p{background:var(--acc2)}
+.xmark{color:var(--acc);font-weight:700;margin-left:12px;font-size:13.5px;letter-spacing:.01em}
+.shake{animation:shake .5s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.caption{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-size:13px;color:var(--mut)}
+.caption b{color:var(--ink)}
+
+/* Scene 2 */
+.spike{position:absolute;top:150px;left:0;right:0;text-align:center}
+.dom{display:inline-flex;gap:5px;padding:12px 16px;background:linear-gradient(180deg,#fbfcfd,#f4f6f8);border:1px solid var(--rule);border-radius:12px;box-shadow:0 2px 8px rgba(20,23,26,.04)}
+.res{width:21px;height:21px;border-radius:5px;background:var(--calm)}
+.res.iface{background:var(--slate);box-shadow:0 0 0 2px var(--acc);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 2px var(--acc)}50%{box-shadow:0 0 0 2px var(--acc),0 0 14px 2px rgba(201,86,75,.55)}}
+.legend{position:absolute;top:206px;left:0;right:0;text-align:center;font-size:12.5px;color:var(--mut)}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin:0 5px 0 16px}
+.strains{position:absolute;top:248px;left:50%;transform:translateX(-50%);width:560px;height:170px;overflow:hidden;
+ -webkit-mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}
+.srow{display:flex;gap:5px;justify-content:center;margin:2.5px 0}
+.sc{width:21px;height:8px;border-radius:2px;background:#eef0f2;transition:background .25s}
+/* entropy bars */
+.ebar{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);width:520px;opacity:0;transition:opacity .6s}
+.ebrow{display:flex;align-items:center;gap:12px;margin:7px 0;font-size:13px;color:var(--ink)}
+.ebrow .lab{width:150px;text-align:right;color:var(--mut);font-weight:600}
+.ebrow .track{flex:1;height:16px;background:#f0f2f4;border-radius:8px;overflow:hidden}
+.ebrow .fill{height:100%;width:0;border-radius:8px;transition:width 1s cubic-bezier(.3,.7,.3,1)}
+.ebrow .val{width:118px;font-weight:800;letter-spacing:-.01em}
+.fold{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:13.5px;font-weight:700;color:var(--acc);opacity:0;transition:opacity .6s}
+.fold b{font-size:16px}
+
+/* Scene 3 */
+.payoff{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+ background:radial-gradient(130% 130% at 50% 20%,#243244 0%,#14171a 70%)}
+.payoff .klabel{font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--acc2);opacity:0}
+.payoff .t{font-size:37px;font-weight:800;color:#fff;text-align:center;letter-spacing:-.02em;max-width:740px;line-height:1.12;opacity:0}
+.payoff .t .acc{color:var(--acc2)}
+.payoff .s{font-size:15.5px;color:#cfd3d8;max-width:600px;text-align:center;line-height:1.55;opacity:0}
+.payoff .tag{margin-top:10px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#8a94a0;opacity:0}
+.payoff .tag b{color:var(--acc2)}
+</style></head>
+<body>
+<div class="stage">
+ <div class="bar"></div>
+ <div class="brand">
+   <svg class="glyph" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#9b2226" stroke-width="2"/><path d="M6 16c0-5.5 4.5-10 10-10" stroke="#9b2226" stroke-width="2.6" stroke-linecap="round"/><path d="M26 16c0 5.5-4.5 10-10 10" stroke="#20394e" stroke-width="2.6" stroke-linecap="round"/></svg>
+   Cross-Species Coevolution <span class="div">·</span> <span class="team">team co-evo</span>
+ </div>
+ <div class="progress"><span class="dot" id="d0"></span><span class="dot" id="d1"></span><span class="dot" id="d2"></span></div>
+
+ <!-- SCENE 1 -->
+ <div class="scene" id="s1">
+   <div class="title rv" id="s1t">The tool that can’t be used</div>
+   <div class="sub rv" id="s1s">Reading coevolution needs a <b>shared family tree</b>. Host and pathogen have none.</div>
+   <div class="trees">
+     <svg width="960" height="230" viewBox="0 0 960 230">
+       <g class="t1" id="htree" stroke="#20394e" stroke-width="2.5">
+         <path class="branch" style="--len:52" d="M300 34 L300 84"/>
+         <path class="branch" style="--len:92" d="M300 84 L232 142"/><path class="branch" style="--len:92" d="M300 84 L368 142"/>
+         <path class="branch" style="--len:66" d="M232 142 L204 198"/><path class="branch" style="--len:66" d="M232 142 L262 198"/>
+         <path class="branch" style="--len:66" d="M368 142 L340 198"/><path class="branch" style="--len:66" d="M368 142 L398 198"/>
+         <circle cx="204" cy="200" r="4" fill="#20394e" stroke="none"/><circle cx="262" cy="200" r="4" fill="#20394e" stroke="none"/><circle cx="340" cy="200" r="4" fill="#20394e" stroke="none"/><circle cx="398" cy="200" r="4" fill="#20394e" stroke="none"/>
+         <text x="300" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#20394e" stroke="none">Human</text>
+       </g>
+       <g class="t1" id="ptree" stroke="#9b2226" stroke-width="2.5">
+         <path class="branch" style="--len:52" d="M660 34 L660 84"/>
+         <path class="branch" style="--len:92" d="M660 84 L592 142"/><path class="branch" style="--len:92" d="M660 84 L728 142"/>
+         <path class="branch" style="--len:66" d="M592 142 L564 198"/><path class="branch" style="--len:66" d="M592 142 L622 198"/>
+         <path class="branch" style="--len:66" d="M728 142 L700 198"/><path class="branch" style="--len:66" d="M728 142 L758 198"/>
+         <circle cx="564" cy="200" r="4" fill="#9b2226" stroke="none"/><circle cx="622" cy="200" r="4" fill="#9b2226" stroke="none"/><circle cx="700" cy="200" r="4" fill="#9b2226" stroke="none"/><circle cx="758" cy="200" r="4" fill="#9b2226" stroke="none"/>
+         <text x="660" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#9b2226" stroke="none">Pathogen</text>
+       </g>
+     </svg>
+   </div>
+   <div class="gap rv" id="gap">✕ &nbsp;No shared branch — no common ancestor</div>
+   <div class="pairbox">
+     <div class="prow rv" id="pr1"><span class="cell h"></span><span class="cell h"></span><span class="cell h"></span><span class="cell p"></span><span class="cell p"></span><span class="cell p"></span><span class="xmark">can’t align</span></div>
+     <div class="prow rv" id="pr2"><span class="cell h"></span><span class="cell h"></span><span class="cell h"></span><span class="cell p"></span><span class="cell p"></span><span class="cell p"></span><span class="xmark">can’t align</span></div>
+   </div>
+   <div class="caption"><b>7 of 8</b> solved host–pathogen complexes share <b>zero taxa</b> — the paired alignment DCA needs cannot be built</div>
+ </div>
+
+ <!-- SCENE 2 -->
+ <div class="scene" id="s2">
+   <div class="title rv" id="s2t">The signal that survives</div>
+   <div class="sub rv" id="s2s">Read variation from <b>one side</b> — across strains of a single pathogen. No tree required.</div>
+   <div class="spike"><div class="dom" id="dom"></div></div>
+   <div class="legend"><span class="sw" style="background:#20394e;box-shadow:0 0 0 2px #9b2226"></span>ACE2-contact interface <span class="sw" style="background:#cdd6dc"></span>rest of the domain</div>
+   <div class="strains" id="strains"></div>
+   <div class="ebar" id="ebar">
+     <div class="ebrow"><span class="lab">Interface residues</span><span class="track"><span class="fill" id="f1" style="background:linear-gradient(90deg,#c9564b,#9b2226)"></span></span><span class="val" style="color:#9b2226">0.43 nats</span></div>
+     <div class="ebrow"><span class="lab">Rest of domain</span><span class="track"><span class="fill" id="f2" style="background:#9aa6b0"></span></span><span class="val" style="color:#6b7480">0.10 nats</span></div>
+   </div>
+   <div class="fold" id="fold"><b>4.2×</b> more variable at the interface &nbsp;·&nbsp; permutation p = 1×10⁻⁴</div>
+ </div>
+
+ <!-- SCENE 3 -->
+ <div class="scene" id="s3">
+   <div class="payoff">
+     <div class="klabel" id="p0">The paradox, resolved</div>
+     <div class="t" id="p1">Coevolution Without a<br><span class="acc">Common Ancestor</span></div>
+     <div class="s" id="p2">A co-speciation-free signal, read from the strain sequences and single structures that pandemic surveillance already collects — flagging escape-prone interface residues before they are annotated.</div>
+     <div class="tag" id="p3">Built with Claude · Life Sciences &nbsp;·&nbsp; <b>team co-evo</b></div>
+   </div>
+ </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+// build residue domain
+const dom=$('dom'), NR=14, IFACE=[5,6,7,8];
+for(let i=0;i<NR;i++){const r=document.createElement('span');r.className='res'+(IFACE.includes(i)?' iface':'');dom.appendChild(r);}
+// build strain grid
+const strains=$('strains'), ROWS=15, rowsEls=[];
+for(let j=0;j<ROWS;j++){const row=document.createElement('div');row.className='srow';const cells=[];
+  for(let i=0;i<NR;i++){const c=document.createElement('span');c.className='sc';row.appendChild(c);cells.push(c);}
+  strains.appendChild(row);rowsEls.push(cells);}
+const IF_COLORS=['#e7c9ca','#d98b83','#c9564b','#9b2226'];
+function paintStrains(t){const shown=Math.floor(t*ROWS);
+  for(let j=0;j<ROWS;j++)for(let i=0;i<NR;i++){const c=rowsEls[j][i];
+    if(j<=shown){ if(IFACE.includes(i)){const on=Math.random(); c.style.background= on<0.72? IF_COLORS[Math.floor(Math.random()*IF_COLORS.length)] : '#f0d9da';}
+      else { c.style.background = Math.random()<0.10? '#b9c3cb':'#dde2e6'; } }
+    else c.style.background='#eef0f2';
+  }}
+
+const scenes=[$('s1'),$('s2'),$('s3')], dots=[$('d0'),$('d1'),$('d2')];
+function show(n){scenes.forEach((s,i)=>s.classList.toggle('show',i===n));dots.forEach((d,i)=>d.classList.toggle('on',i===n));}
+function reveal(id,d){setTimeout(()=>$(id)&&$(id).classList.add('in'),d);}
+function hideRev(ids){ids.forEach(id=>$(id)&&$(id).classList.remove('in'));}
+
+let strainTimer=null;
+function scene1(){
+  hideRev(['s1t','s1s','gap','pr1','pr2']);
+  // reset trees
+  document.querySelectorAll('.branch').forEach(b=>b.classList.remove('drawn'));
+  $('htree').style.transform='';$('ptree').style.transform='';
+  show(0);
+  reveal('s1t',200);reveal('s1s',450);
+  // draw branches
+  setTimeout(()=>document.querySelectorAll('.branch').forEach((b,i)=>setTimeout(()=>b.classList.add('drawn'),i*70)),800);
+  // drift apart
+  setTimeout(()=>{$('htree').style.transform='translateX(-52px)';$('ptree').style.transform='translateX(52px)';},2400);
+  reveal('gap',3600);
+  reveal('pr1',4300);reveal('pr2',4600);
+  setTimeout(()=>{$('pr1').classList.add('shake');$('pr2').classList.add('shake');},4900);
+  setTimeout(()=>{$('pr1').classList.remove('shake');$('pr2').classList.remove('shake');},5500);
+}
+function scene2(){
+  hideRev(['s2t','s2s']);$('ebar').style.opacity=0;$('fold').style.opacity=0;$('f1').style.width=0;$('f2').style.width=0;
+  show(1);reveal('s2t',200);reveal('s2s',450);
+  let t=0;clearInterval(strainTimer);
+  setTimeout(()=>{strainTimer=setInterval(()=>{t+=0.07;paintStrains(Math.min(t,1));
+    if(t>=1){clearInterval(strainTimer);
+      $('ebar').style.opacity=1;
+      setTimeout(()=>{$('f1').style.width='86%';$('f2').style.width='20%';},150);
+      setTimeout(()=>$('fold').style.opacity=1,1200);
+    }},95);},700);
+}
+function scene3(){
+  ['p0','p1','p2','p3'].forEach(id=>$(id).style.opacity=0);
+  show(2);
+  const st=[['p0',200],['p1',500],['p2',1100],['p3',1700]];
+  st.forEach(([id,d])=>setTimeout(()=>{$(id).style.transition='opacity .8s ease, transform .8s ease';$(id).style.opacity=1;},d));
+}
+function loop(){scene1();setTimeout(scene2,6800);setTimeout(scene3,13800);setTimeout(loop,19500);}
+loop();
+</script>
+</body></html>
