@@ -51,7 +51,7 @@ jupyter notebook reproduce_results.ipynb
 ## View online
 
 With GitHub Pages enabled (Settings → Pages → Deploy from branch `main`, root), the site is served at:
-`[https://liyiyuian.github.io/built-with-claude-life-sciences-coevo/](https://liyiyuian.github.io/host-pathogen-coevolution/)`
+`https://liyiyuian.github.io/host-pathogen-coevolution/`
 
 ---
 
