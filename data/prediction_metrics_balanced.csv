@@ -1,0 +1,13 @@
+feature_set,cv,roc_auc,roc_auc_sd,pr_auc
+seq_only,stratified (pathogen seen),0.613,0.009,0.627
+seq_only,LOSO (held-out species),0.567,0.092,0.564
+esm_only,stratified (pathogen seen),0.644,0.009,0.661
+esm_only,LOSO (held-out species),0.568,0.095,0.575
+esm+seq,stratified (pathogen seen),0.639,0.007,0.659
+esm+seq,LOSO (held-out species),0.557,0.102,0.562
+coevo_only,stratified (pathogen seen),0.542,0.013,0.55
+coevo_only,LOSO (held-out species),0.521,0.029,0.526
+esm+coevo,stratified (pathogen seen),0.639,0.011,0.66
+esm+coevo,LOSO (held-out species),0.581,0.099,0.579
+esm+seq+coevo,stratified (pathogen seen),0.645,0.008,0.665
+esm+seq+coevo,LOSO (held-out species),0.569,0.102,0.573

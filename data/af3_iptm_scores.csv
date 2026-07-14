@@ -1,0 +1,8 @@
+job_name,pathogen,label,iptm,ptm,ranking,host_len,path_len
+P13693__A0A6L7HCR9,Bacillus anthracis,0,0.1,0.68,0.24,172,374
+O95780__A0A6H3A910,Bacillus anthracis,1,0.13,0.37,0.26,498,297
+Q16822__A0A6L8PLI9,Bacillus anthracis,1,0.13,0.7,0.26,640,227
+O60518__P0DTC3,Betacoronavirus pandemicum,0,0.17,0.58,0.28,1105,275
+Q15233__P0DTC8,Betacoronavirus pandemicum,0,0.45,0.45,0.67,471,121
+P23284__P0DTC3,Betacoronavirus pandemicum,1,0.2,0.46,0.35,216,275
+Q6UXM1__P0DTC3,Betacoronavirus pandemicum,1,0.4,0.42,0.56,1119,275

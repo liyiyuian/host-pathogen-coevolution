@@ -1,0 +1,14 @@
+species,superkingdom,n,loso_esm_only,loso_esm_coevo,coevo_delta
+Rhadinovirus humangamma8,Viruses,800,0.492,0.517,0.025
+Francisella tularensis,Bacteria,800,0.499,0.503,0.004
+Chlamydia trachomatis,Bacteria,654,0.504,0.48,-0.024
+Lentivirus humimdef1,Viruses,598,0.506,0.541,0.035
+Yersinia pestis,Bacteria,800,0.508,0.5,-0.008
+Bacillus anthracis,Bacteria,800,0.509,0.518,0.009
+Betacoronavirus pandemicum,Viruses,800,0.516,0.531,0.015
+Salmonella enterica,Bacteria,800,0.545,0.525,-0.02
+Lymphocryptovirus humangamma4,Viruses,800,0.546,0.552,0.006
+Betacoronavirus cameli,Viruses,246,0.571,0.683,0.112
+Escherichia coli,Bacteria,474,0.665,0.656,-0.009
+Alphapapillomavirus 9,Viruses,800,0.727,0.754,0.027
+Alphapapillomavirus 7,Viruses,800,0.799,0.788,-0.011
