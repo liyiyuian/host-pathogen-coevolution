@@ -27,6 +27,27 @@ A study of co-evolutionary signals in host–pathogen protein interactions, buil
 1. **Escape-residue early warning** from surveillance sequences.
 2. **An honest cross-species benchmark** that exposes phylogenetic leakage.
 
+## Demo video
+
+▸ https://youtu.be/WdWUGd2V-Go
+
+
+
+## Reproduce the results
+
+```bash
+pip install -r requirements.txt
+jupyter notebook reproduce_results.ipynb
+```
+
+`reproduce_results.ipynb` loads the saved result data in [`data/`](data/) and regenerates every headline number — the balanced-benchmark AUCs, the coevolution lift (+0.0065 pooled), and the AlphaFold-3 no-relative negative (AUC 0.50) — matching the report to 4 decimals. No GPU or re-training required.
+
+| Path | Contents |
+|------|----------|
+| [`reproduce_results.ipynb`](reproduce_results.ipynb) | Reproducibility notebook |
+| [`data/`](data/) | Result files: OOF predictions, metric tables, AF3 scores, bibliography |
+| [`figures/`](figures/) | Publication figures (PNG) |
+
 ## View online
 
 With GitHub Pages enabled (Settings → Pages → Deploy from branch `main`, root), the site is served at:
